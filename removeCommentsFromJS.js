@@ -6,26 +6,26 @@ let tags = ['\'', '"', '`'],
     res;
 
 
-const arrHandler = arr => {
+const arrHandler = arr => {//Обьединяем массив и выносим его в начало массива
     let [a = [], ...b] = arr;
-    arr = b.join('')
+    b = b.join('')
         .replace(RegExpForBlockComment, '')
         .replace(RegExpForLineComment, '')
         .replace(RegExpForEmptyLine, '\n');
-    return [[...a, arr].join('')];
+    return [[...a, b].join('')];
 };
 
 const removeComments = code => {
-    code = '\n' + code;
-    const length = code.length;
-    let parsedStrArr = [];
-    for (let i = 0; i < length; i++) {
+    const length = code.length; //определяем к-во символов в коде
+    let parsedStrArr = [],
+        i;
+    for (i = 0; i < length; i++) {
         parsedStrArr.push(code[i]);
-        if (tags.includes(code[i])) {
+        if (tags.includes(code[i])) {//на случай цытат
             let tag = code[i];
             let start = i;
             parsedStrArr = arrHandler(parsedStrArr);
-            while (true) {
+            while (true) {//находим конец кавычек и добавляем их в начало массива
                 start++;
                 parsedStrArr.push(code[start]);
                 if (code[start] === tag) {
@@ -36,7 +36,7 @@ const removeComments = code => {
             }
         }
     }
-    return res = arrHandler(parsedStrArr).join('').slice(1, length);
+    return res = arrHandler(parsedStrArr).join('').slice(0, length);
 };
-const code = readFileSync('./removeCommentsFromDOM.js', 'utf-8');
+const code = readFileSync('./removeCommentsFromDOM.js', 'utf-8'); //первым аргументом передаем путь к файлу JavaScript, с которого нужно удалить коментарии
 writeFileSync('clear.js', removeComments(code));

@@ -3,6 +3,7 @@ const commentRemover = (elem) => {
         elem.remove();
     }
 };
+
 const getChildren = (element) => {
     const childElements = [...element.childNodes];
     if (childElements.length > 0) {
